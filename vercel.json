@@ -1,0 +1,5 @@
+{
+    "version": 2,
+    "builds": [{ "src": "task-manager-backend/index.js", "use": "@vercel/node" }],
+    "routes": [{ "src": "/(.*)", "dest": "task-manager-backend/index.js" }]
+  }
