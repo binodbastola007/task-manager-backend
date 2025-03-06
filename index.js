@@ -1,7 +1,7 @@
-import express from 'express';
-import mongoose from 'mongoose';
-import cors from 'cors';
-import dotenv from 'dotenv';
+const express = require("express");
+const mongoose = require("mongoose");
+const cors = require("cors");
+const dotenv = require("dotenv");
 
 dotenv.config();
 
@@ -27,14 +27,18 @@ mongoDbConnection();
 
 const taskSchema = new mongoose.Schema({
   name: { type: String, required: true },
-  category: { type: String, enum: ['Work', 'Personal', 'Shopping', 'Others'], required: true },
-  status: { type: String, enum: ['pending', 'completed'], default: 'pending' },
+  category: {
+    type: String,
+    enum: ["Work", "Personal", "Shopping", "Others"],
+    required: true,
+  },
+  status: { type: String, enum: ["pending", "completed"], default: "pending" },
 });
 
-const Task = mongoose.model('Task', taskSchema);
+const Task = mongoose.model("Task", taskSchema);
 
 // Add a new task
-app.post('/tasks', async (req, res) => {
+app.post("/tasks", async (req, res) => {
   try {
     const { name, category } = req.body;
     const task = new Task({ name, category });
@@ -46,7 +50,7 @@ app.post('/tasks', async (req, res) => {
 });
 
 // Get all tasks
-app.get('/tasks', async (req, res) => {
+app.get("/tasks", async (req, res) => {
   try {
     const tasks = await Task.find();
     res.json(tasks);
@@ -56,10 +60,14 @@ app.get('/tasks', async (req, res) => {
 });
 
 // Mark a task as completed
-app.put('/tasks/:id', async (req, res) => {
+app.put("/tasks/:id", async (req, res) => {
   try {
-    const task = await Task.findByIdAndUpdate(req.params.id, { status: 'completed' }, { new: true });
-    if (!task) return res.status(404).json({ error: 'Task not found' });
+    const task = await Task.findByIdAndUpdate(
+      req.params.id,
+      { status: "completed" },
+      { new: true }
+    );
+    if (!task) return res.status(404).json({ error: "Task not found" });
     res.json(task);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -67,11 +75,11 @@ app.put('/tasks/:id', async (req, res) => {
 });
 
 // Delete a task
-app.delete('/tasks/:id', async (req, res) => {
+app.delete("/tasks/:id", async (req, res) => {
   try {
     const task = await Task.findByIdAndDelete(req.params.id);
-    if (!task) return res.status(404).json({ error: 'Task not found' });
-    res.json({ message: 'Task deleted successfully' });
+    if (!task) return res.status(404).json({ error: "Task not found" });
+    res.json({ message: "Task deleted successfully" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
